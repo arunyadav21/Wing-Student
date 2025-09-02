@@ -82,31 +82,33 @@ export default function News() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-            Campus <span className="text-yellow-500">News</span>
-          </h1>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Stay updated with the latest happenings, events, and opportunities at our college
-          </p>
-        </div>
-
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
-                activeCategory === category.id
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-blue-100"
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
+        {/* Header with categories in top right */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+          <div className="mb-6 md:mb-0">
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
+              Campus <span className="text-yellow-500">News</span>
+            </h1>
+            <p className="text-lg text-gray-700 max-w-3xl">
+              Stay updated with the latest happenings, events, and opportunities at our college
+            </p>
+          </div>
+          
+          {/* Category Filter - positioned top right */}
+          <div className="flex flex-wrap gap-3 self-stretch justify-end">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  activeCategory === category.id
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-blue-100"
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* News Grid */}
@@ -116,7 +118,7 @@ export default function News() {
               key={news.id}
               className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
             >
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
                 <img
                   src={news.image}
                   alt={news.title}

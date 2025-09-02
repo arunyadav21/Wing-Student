@@ -49,7 +49,7 @@ export default function Gallery() {
     },
     {
       id: 7,
-      src: "https://images.unsplash.com/photo-1515168833906-d2a3b82b3026?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      src: "https://lp-cms-production.imgix.net/2023-01/shutterstock_1060043645.jpg?auto=format&q=75&w=1920",
       category: "cultural",
       title: "Art Exhibition",
       description: "Showcasing student artwork and creativity"
