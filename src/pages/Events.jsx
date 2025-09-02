@@ -75,31 +75,33 @@ export default function Events() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-            Upcoming <span className="text-yellow-500">Events</span>
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover exciting events that help you learn, grow, and connect with the community
-          </p>
-        </div>
-
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {categories.map(category => (
-            <button
-              key={category}
-              onClick={() => setActiveFilter(category)}
-              className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
-                activeFilter === category
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-blue-100"
-              }`}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
+        {/* Header with categories in top right */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+          <div className="mb-6 md:mb-0">
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
+              Upcoming <span className="text-yellow-500">Events</span>
+            </h1>
+            <p className="text-lg text-gray-600 max-w-3xl">
+              Discover exciting events that help you learn, grow, and connect with the community
+            </p>
+          </div>
+          
+          {/* Filter Buttons - positioned top right */}
+          <div className="flex flex-wrap gap-3  justify-end">
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => setActiveFilter(category)}
+                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  activeFilter === category
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-white text-gray-400 hover:bg-blue-50"
+                }`}
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Events Grid */}
@@ -110,7 +112,7 @@ export default function Events() {
               className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
             >
               {/* Event Image */}
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
                 <img
                   src={event.image}
                   alt={event.title}
