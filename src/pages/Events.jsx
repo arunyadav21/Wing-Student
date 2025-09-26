@@ -2,6 +2,9 @@ import { useState } from "react";
 
 export default function Events() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const events = [
     { 
@@ -32,7 +35,7 @@ export default function Events() {
       location: "Seminar Hall",
       desc: "Interactive workshop to develop leadership & teamwork skills.", 
       category: "workshop",
-      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwa-90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
     },
     { 
       id: 4, 
@@ -71,6 +74,36 @@ export default function Events() {
   const filteredEvents = activeFilter === "all" 
     ? events 
     : events.filter(event => event.category === activeFilter);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    
+    if (!email) {
+      alert("Please enter your email address");
+      return;
+    }
+    
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubscribed(true);
+      setEmail("");
+      
+      // Reset after 3 seconds
+      setTimeout(() => {
+        setIsSubscribed(false);
+      }, 3000);
+    }, 1500);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -175,16 +208,31 @@ export default function Events() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-white text-center mt-16">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Never Miss an Event</h2>
           <p className="mb-6 max-w-2xl mx-auto">Subscribe to our newsletter and get notified about upcoming events and activities.</p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors">
-              Subscribe
-            </button>
-          </div>
+          
+          {isSubscribed ? (
+            <div className="bg-green-500 text-white p-4 rounded-lg max-w-md mx-auto">
+              <p className="font-semibold">🎉 Thank you for subscribing!</p>
+              <p>You'll receive updates about our events soon.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                required
+              />
+              <button 
+                type="submit"
+                disabled={isLoading}
+                className={`bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+              >
+                {isLoading ? 'Subscribing...' : 'Subscribe'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

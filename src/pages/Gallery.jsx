@@ -1,8 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [loginCredentials, setLoginCredentials] = useState({
+    username: "",
+    password: ""
+  });
+  const [uploadData, setUploadData] = useState({
+    title: "",
+    description: "",
+    category: "events"
+  });
+
+  // Simulated admin credentials (in a real app, this would be handled by a backend)
+  const adminCredentials = {
+    username: "admin",
+    password: "admin123"
+  };
+
+  useEffect(() => {
+    // Check if user is already logged in as admin
+    const savedAdminStatus = localStorage.getItem("isAdmin");
+    if (savedAdminStatus === "true") {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const galleryImages = [
     {
@@ -91,9 +117,63 @@ export default function Gallery() {
     setSelectedImage(null);
   };
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (
+      loginCredentials.username === adminCredentials.username &&
+      loginCredentials.password === adminCredentials.password
+    ) {
+      setIsAdmin(true);
+      localStorage.setItem("isAdmin", "true");
+      setShowLoginModal(false);
+      setLoginCredentials({ username: "", password: "" });
+    } else {
+      alert("Invalid credentials. Please try again.");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem("isAdmin");
+  };
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+    // In a real application, this would upload the image to a server
+    console.log("Uploading photo:", uploadData);
+    alert("Photo submitted for review! It will be published after approval.");
+    setUploadData({
+      title: "",
+      description: "",
+      category: "events"
+    });
+    setShowUploadModal(false);
+  };
+
+  const handleSubmitClick = () => {
+    if (isAdmin) {
+      setShowUploadModal(true);
+    } else {
+      setShowLoginModal(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        {/* Admin Indicator */}
+        {isAdmin && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
+            <span>You are logged in as an administrator</span>
+            <button
+              onClick={handleLogout}
+              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
@@ -187,12 +267,145 @@ export default function Gallery() {
         {/* Call to Action */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-white text-center mt-16">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">Share Your Memories</h2>
-          <p className="mb-6 max-w-2xl mx-auto">Have photos from our events? Share them with us to be featured in our gallery.</p>
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors">
-            Submit Photos
+          <p className="mb-6 max-w-2xl mx-auto">
+            {isAdmin 
+              ? "As an admin, you can submit photos to the gallery." 
+              : "Have photos from our events? Contact an admin to have them featured in our gallery."
+            }
+          </p>
+          <button 
+            onClick={handleSubmitClick}
+            className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors"
+          >
+            {isAdmin ? "Submit Photos" : "Request to Submit Photos"}
           </button>
         </div>
       </div>
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Admin Login</h2>
+              <button onClick={() => setShowLoginModal(false)} className="text-gray-500 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  value={loginCredentials.username}
+                  onChange={(e) => setLoginCredentials({...loginCredentials, username: e.target.value})}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter admin username"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={loginCredentials.password}
+                  onChange={(e) => setLoginCredentials({...loginCredentials, password: e.target.value})}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter admin password"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              >
+                Login
+              </button>
+            </form>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              <p>Demo credentials: username: admin, password: admin123</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upload Modal (Admin Only) */}
+      {showUploadModal && isAdmin && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Submit New Photo</h2>
+              <button onClick={() => setShowUploadModal(false)} className="text-gray-500 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleUpload} className="space-y-4">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Photo Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  value={uploadData.title}
+                  onChange={(e) => setUploadData({...uploadData, title: e.target.value})}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter photo title"
+                />
+              </div>
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  id="description"
+                  value={uploadData.description}
+                  onChange={(e) => setUploadData({...uploadData, description: e.target.value})}
+                  required
+                  rows="3"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter photo description"
+                />
+              </div>
+              <div>
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select
+                  id="category"
+                  value={uploadData.category}
+                  onChange={(e) => setUploadData({...uploadData, category: e.target.value})}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="events">Events</option>
+                  <option value="cultural">Cultural</option>
+                  <option value="workshops">Workshops</option>
+                  <option value="career">Career</option>
+                  <option value="sports">Sports</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="photo" className="block text-sm font-medium text-gray-700 mb-1">Upload Photo</label>
+                <input
+                  type="file"
+                  id="photo"
+                  accept="image/*"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+              >
+                Submit Photo
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

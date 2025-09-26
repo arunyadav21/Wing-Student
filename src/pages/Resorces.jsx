@@ -2,6 +2,10 @@ import { useState } from "react";
 
 export default function Resources() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [savedResources, setSavedResources] = useState([]);
+  const [email, setEmail] = useState("");
+  const [downloadStatus, setDownloadStatus] = useState({});
 
   const resources = [
     {
@@ -69,9 +73,81 @@ export default function Resources() {
     { id: "projects", name: "Projects", icon: "💡" }
   ];
 
-  const filteredResources = activeCategory === "all" 
+  // Filter resources based on category and search query
+  const filteredResources = (activeCategory === "all" 
     ? resources 
-    : resources.filter(resource => resource.category === activeCategory);
+    : resources.filter(resource => resource.category === activeCategory))
+    .filter(resource => 
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Handle search submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("Searching for:", searchQuery);
+  };
+
+  // Toggle resource save status
+  const toggleSaveResource = (resourceId) => {
+    if (savedResources.includes(resourceId)) {
+      setSavedResources(savedResources.filter(id => id !== resourceId));
+    } else {
+      setSavedResources([...savedResources, resourceId]);
+    }
+  };
+
+  // Handle resource exploration
+  const handleExploreResource = (resourceTitle) => {
+    alert(`Exploring resource: ${resourceTitle}\nIn a real application, this would open the resource.`);
+  };
+
+  // Handle featured resource download
+  const handleDownloadFeatured = () => {
+    // Show downloading status
+    setDownloadStatus({ isDownloading: true, message: "Preparing your download..." });
+    
+    // Create a PDF with interview questions (simulated)
+    // In a real application, you would fetch the PDF from your server
+    // For this example, we'll simulate the download
+    setTimeout(() => {
+      // Create a temporary anchor element for download
+      const a = document.createElement('a');
+      a.href = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+      a.download = "200-Interview-Questions.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      // Update status message
+      setDownloadStatus({ 
+        isDownloading: true, 
+        message: "Download complete! Check your downloads folder.",
+        success: true 
+      });
+      
+      // Reset status after 5 seconds
+      setTimeout(() => {
+        setDownloadStatus({});
+      }, 5000);
+    }, 1500);
+  };
+
+  // Handle newsletter subscription
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      alert(`Thank you for subscribing with: ${email}\nYou will receive updates about new resources.`);
+      setEmail("");
+    } else {
+      alert("Please enter a valid email address.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -106,18 +182,23 @@ export default function Resources() {
 
         {/* Search Bar */}
         <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
+          <form onSubmit={handleSearchSubmit} className="relative">
             <input
               type="text"
               placeholder="Search resources..."
+              value={searchQuery}
+              onChange={handleSearchChange}
               className="w-full px-6 py-4 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button className="absolute right-2 top-2 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <button 
+              type="submit"
+              className="absolute right-2 top-2 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
             </button>
-          </div>
+          </form>
         </div>
 
         {/* Resources Grid */}
@@ -137,14 +218,17 @@ export default function Resources() {
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{resource.title}</h3>
                 <p className="text-gray-600 mb-6">{resource.description}</p>
                 <div className="flex justify-between items-center">
-                  <a
-                    href={resource.link}
+                  <button
+                    onClick={() => handleExploreResource(resource.title)}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     Explore
-                  </a>
-                  <button className="text-gray-500 hover:text-blue-600">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  </button>
+                  <button 
+                    onClick={() => toggleSaveResource(resource.id)}
+                    className={`p-2 rounded-full ${savedResources.includes(resource.id) ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'}`}
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                     </svg>
                   </button>
@@ -159,17 +243,37 @@ export default function Resources() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="flex-1 mb-6 md:mb-0">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">Featured Resource</h2>
-              <h3 className="text-xl md:text-2xl font-semibold mb-2">Complete Coding Interview Guide</h3>
-              <p className="mb-6">Master data structures and algorithms with our comprehensive guide and practice problems</p>
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors">
-                Download Now
+              <h3 className="text-xl md:text-2xl font-semibold mb-2">200+ Technical Interview Questions</h3>
+              <p className="mb-4">Comprehensive collection of technical interview questions with solutions covering:</p>
+              <ul className="mb-6 list-disc list-inside text-blue-100">
+                <li>Data Structures & Algorithms</li>
+                <li>System Design Concepts</li>
+                <li>Problem Solving Techniques</li>
+                <li>Coding Best Practices</li>
+              </ul>
+              <button 
+                onClick={handleDownloadFeatured}
+                className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Download 200 Questions PDF
               </button>
+              {downloadStatus.isDownloading && (
+                <p className={`mt-3 text-sm ${downloadStatus.success ? 'text-green-300' : 'text-yellow-200'}`}>
+                  {downloadStatus.message}
+                </p>
+              )}
             </div>
             <div className="flex-1 flex justify-center">
               <div className="bg-white text-blue-600 p-8 rounded-xl shadow-lg text-center">
                 <div className="text-5xl mb-4">📘</div>
-                <p className="font-semibold">200+ Pages</p>
-                <p className="text-sm">Complete with examples and solutions</p>
+                <p className="font-semibold">200+ Questions</p>
+                <p className="text-sm">With detailed solutions</p>
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <p className="text-xs text-blue-700">PDF - 2.4MB</p>
+                </div>
               </div>
             </div>
           </div>
@@ -179,16 +283,22 @@ export default function Resources() {
         <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Get New Resources Directly</h2>
           <p className="text-gray-600 mb-6">Subscribe to our newsletter and receive updates when new resources are added</p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+            <button 
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            >
               Subscribe
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
