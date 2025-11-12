@@ -63,7 +63,7 @@ const Home = () => {
 
   // Slider functionality with continuous loop
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev - 1) % totalSlides);
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
 
   const prevSlide = () => {
