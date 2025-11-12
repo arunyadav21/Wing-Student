@@ -6,6 +6,7 @@ const Home = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showWhatsAppPopup, setShowWhatsAppPopup] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +16,86 @@ const Home = () => {
   const handleWhatsAppClick = () => {
     setShowWhatsAppPopup(!showWhatsAppPopup);
   };
+
+  // Updated counsellor data with more counsellors for better slider experience
+  const counsellors = [
+    {
+      id: 1,
+      name: "Samiksha Rai",
+      specialization: "Career Guidance & Academic Planning",
+      experience: "3+ years",
+      image: "Sameeksha.jpg",
+      availability: "Mon-Sat",
+      bio: "Expert in career counseling and academic planning for engineering students"
+    },
+    {
+      id: 2,
+      name: "Kajal Thakur",
+      specialization: "Senior Career Counselor",
+      experience: "03+ years",
+      image: "kajal1.jpg",
+      availability: "Mon-Sat",
+      bio: "Specialized in student mental health and stress management techniques"
+    },
+    {
+      id: 3,
+      name: "Neha Sharma",
+      specialization: "Study Skills & Time Management",
+      experience: "3+ years",
+      image: "neha2.jpg",
+      availability: "Mon-Fri",
+      bio: "Helps students develop effective study habits and time management skills"
+    },
+    {
+      id: 4,
+      name: "Mohit Keshtwal",
+      specialization: "Career Transition & Growth",
+      experience: "4+ years",
+      image: "mohit.jpg",
+      availability: "Tue, Thu, Sat",
+      bio: "Expert in helping professionals transition to new career paths"
+    }
+  ];
+
+  // Calculate total slides - show 3 counsellors per slide
+  const counsellorsPerSlide = 3;
+  const totalSlides = Math.ceil(counsellors.length / counsellorsPerSlide);
+
+  // Slider functionality with continuous loop
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev - 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
+  // Calculate visible counsellors based on current slide
+  const getVisibleCounsellors = () => {
+    const startIndex = currentSlide * counsellorsPerSlide;
+    let visibleCounsellors = [0];
+    
+    // Get counsellors for current slide
+    for (let i = 0; i < counsellorsPerSlide; i++) {
+      const index = (startIndex + i) % counsellors.length;
+      visibleCounsellors.push(counsellors[index]);
+    }
+    
+    return visibleCounsellors.slice(1); // Remove the initial 0 placeholder
+  };
+
+  // Auto slide every 5 seconds - infinite loop
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    return () => clearInterval(slideInterval);
+  }, [totalSlides]);
 
   // Login Modal Component
   const LoginModal = ({ onClose }) => {
@@ -278,6 +359,7 @@ const Home = () => {
             <a href="#home" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
             <a href="#mission" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Mission</a>
             <a href="#features" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Features</a>
+            <a href="#counsellors" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Counsellors</a>
             <a href="#stats" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Stats</a>
             <a href="#join" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Join Us</a>
           </div>
@@ -425,14 +507,156 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Counsellors Section with Slider */}
+      <section id="counsellors" className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
+            Meet Our <span className="text-blue-600">Counsellors</span>
+          </h2>
+          <p className="text-center text-gray-600 max-w-3xl mx-auto mb-12">
+            Professional guidance and support for your academic and personal growth journey
+          </p>
+
+          {/* Slider Container */}
+          <div className="relative max-w-6xl mx-auto">
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white hover:bg-blue-600 text-blue-600 hover:text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 z-10 border border-blue-200 hover:border-blue-600"
+              aria-label="Previous counsellors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white hover:bg-blue-600 text-blue-600 hover:text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 z-10 border border-blue-200 hover:border-blue-600"
+              aria-label="Next counsellors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+
+            {/* Counsellors Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+              {getVisibleCounsellors().map((counsellor, index) => (
+                <div key={`${counsellor.id}-${currentSlide}-${index}`} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                  {/* Larger image container - full photo visible */}
+                  <div className="h-80 bg-gradient-to-r from-blue-100 to-blue-200 relative overflow-hidden">
+                    <img
+                      src={counsellor.image}
+                      alt={counsellor.name}
+                      className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = e.target.nextSibling;
+                        if (fallback) {
+                          fallback.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    {/* Fallback when image fails to load */}
+                    <div 
+                      className="absolute inset-0 hidden items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600"
+                      style={{ display: 'none' }}
+                    >
+                      <div className="text-white text-center">
+                        <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                          </svg>
+                        </div>
+                        <span className="font-semibold text-lg">{counsellor.name}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{counsellor.name}</h3>
+                    <p className="text-blue-600 font-medium mb-3">{counsellor.specialization}</p>
+                    <div className="flex items-center text-gray-600 mb-2">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <span className="text-sm">Experience: {counsellor.experience}</span>
+                    </div>
+                    <div className="flex items-center text-gray-600 mb-4">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      <span className="text-sm">Available: {counsellor.availability}</span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-6">{counsellor.bio}</p>
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors text-base">
+                      Book Session
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: totalSlides }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentSlide 
+                      ? 'bg-blue-600 w-8' 
+                      : 'bg-blue-300 hover:bg-blue-400'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Counselling Services Info */}
+          <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Career Guidance</h3>
+                <p className="text-sm opacity-90">Personalized career planning and roadmap</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Free Career Counselling</h3>
+                <p className="text-sm opacity-90">Make Smarter Career Decisions with Confidence</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Study Skills</h3>
+                <p className="text-sm opacity-90">Effective learning techniques and time management</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section id="stats" className="py-16 bg-blue-600 text-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { number: "2,500+", label: "Active Members" },
+              { number: "50,000+", label: "Active Members" },
               { number: "120+", label: "Events Yearly" },
-              { number: "85%", label: "Career Advancement" },
+              { number: "92%", label: "Career Advancement" },
               { number: "98%", label: "Satisfaction Rate" }
             ].map((stat, index) => (
               <div key={index} className="p-4">
@@ -496,13 +720,14 @@ const Home = () => {
               <ul className="space-y-2">
                 <li className="text-gray-400">officialarun8565@gmail.com</li>
                 <li className="text-gray-400">+91 9129652795</li>
-                <li className="text-gray-400">University Campus, Education City</li>
+                <li className="text-gray-400"> Floor -4, Kalgidhar Enclave, SCO 10,
+                   Baltana, Sector 19, Zirakpur, Punjab 140604</li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2023 Student Wing. All rights reserved.</p>
+            <p>&copy; 2025 Student Wing. All rights reserved.</p>
           </div>
         </div>
       </footer>

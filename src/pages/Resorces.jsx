@@ -118,8 +118,12 @@ export default function Resources() {
     setTimeout(() => {
       // Create a temporary anchor element for download
       const a = document.createElement('a');
-      a.href = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-      a.download = "200-Interview-Questions.pdf";
+      <a href="https://careerdefiner.com/resources/technical-interview-questions.pdf" 
+  download="Technical-Interview-Questions-Part1.pdf"
+>
+  Download 200 Questions PDF
+</a>
+
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
