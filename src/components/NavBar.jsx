@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import logo from "../assets/aisso-logo.jpg"; // ✅ Import your AISSO logo
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,14 +8,19 @@ export default function Navbar() {
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 shadow-xl">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo / Brand Name */}
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-            <span className="text-blue-600 font-bold text-lg">SW</span>
+        {/* ✅ Logo / Brand Name */}
+        <Link to="/" className="flex items-center space-x-3">
+          <img
+            src={logo}
+            alt="AISSO Logo"
+            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
+          />
+          <div className="hidden sm:block">
+            <h1 className="text-2xl font-bold tracking-wide">Student Wing</h1>
+            <p className="text-sm text-yellow-300 font-medium">
+              Registered under AISSO
+            </p>
           </div>
-          <h1 className="text-2xl font-bold tracking-wide hidden sm:block">
-            Student Wing
-          </h1>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -28,7 +34,6 @@ export default function Navbar() {
           <NavLink to="/news" label="News" />
           <NavLink to="/alumni" label="Alumni" />
           <NavLink to="/contact" label="Contact" />
-          
         </div>
 
         {/* Mobile menu button */}
@@ -86,7 +91,7 @@ export default function Navbar() {
             <Link
               to="/registration"
               onClick={() => setIsOpen(false)}
-              className="col-span-2 bg-yellow-400 text-blue-600 text-center px-4 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors mt-2"
+              className="col-span-2 bg-yellow-400 text-blue-700 text-center px-4 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors mt-2"
             >
               Register Now
             </Link>
@@ -97,7 +102,7 @@ export default function Navbar() {
   );
 }
 
-// Component for desktop navigation links
+// ✅ Component for desktop navigation links
 function NavLink({ to, label }) {
   return (
     <Link
@@ -110,7 +115,7 @@ function NavLink({ to, label }) {
   );
 }
 
-// Component for mobile navigation links
+// ✅ Component for mobile navigation links
 function MobileNavLink({ to, label, onClick }) {
   return (
     <Link

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -693,6 +694,15 @@ const Home = () => {
               <p className="text-gray-400">
                 Empowering students with knowledge, leadership, and opportunities to excel.
               </p>
+              <div className="mt-4">
+                <h4 className="text-lg font-semibold mb-2 text-white">AISSO Registration</h4>
+                <p className="text-sm text-gray-400">
+                  Registered under AISSO (All India Society for Students' Organization)
+                </p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Registration No: AISSO/2024/STW/789
+                </p>
+              </div>
             </div>
             
             <div>
@@ -717,17 +727,31 @@ const Home = () => {
             
             <div>
               <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
-              <ul className="space-y-2">
-                <li className="text-gray-400">officialarun8565@gmail.com</li>
-                <li className="text-gray-400">+91 9129652795</li>
-                <li className="text-gray-400"> Floor -4, Kalgidhar Enclave, SCO 10,
-                   Baltana, Sector 19, Zirakpur, Punjab 140604</li>
+              <ul className="space-y-3">
+                <li>
+                  <span className="text-gray-400 font-medium">Corporate Office:</span>
+                  <p className="text-gray-400 text-sm mt-1">
+                    Floor -3, Kalgidhar Enclave, SCO 10,<br />
+                    Baltana, Sector 19,<br />
+                    Zirakpur, Punjab 140604
+                  </p>
+                </li>
+                <li>
+                  <span className="text-gray-400 font-medium">Head Office:</span>
+                  <p className="text-gray-400 text-sm mt-1">
+                    AISSO Headquarters,<br />
+                    Rathee Garden,Gohana Road Meham<br />
+                    India 124112
+                  </p>
+                </li>
+                <li className="text-gray-400"> satishrathee001@gmail.com </li>
+                <li className="text-gray-400">+91 9215050000</li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Student Wing. All rights reserved.</p>
+            <p>&copy; 2025 Student Wing. All rights reserved. | Registered under AISSO</p>
           </div>
         </div>
       </footer>
