@@ -590,9 +590,15 @@ const Home = () => {
                       <span className="text-sm">Available: {counsellor.availability}</span>
                     </div>
                     <p className="text-gray-600 text-sm mb-6">{counsellor.bio}</p>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors text-base">
-                      Book Session
-                    </button>
+                    <button
+                        onClick={() => {
+                           window.scrollTo({ top: 0, behavior: "smooth" }); // scrolls to top
+                             navigate("/contact"); // navigates to Contact page
+                                }}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors text-base"
+                              >
+                                 Book Session
+                                 </button>
                   </div>
                 </div>
               ))}
@@ -685,7 +691,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer 
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
@@ -755,7 +761,7 @@ const Home = () => {
           </div>
         </div>
       </footer>
-
+      */}
       {/* Modals */}
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />

@@ -36,7 +36,7 @@ export default function Contact() {
         </svg>
       ),
       title: "Email Us",
-      detail: "officialarun8565@gmail.com",
+      detail: "satishrathee001@gmail.com",
       link: "mailto:info@studentwing.org"
     },
     {
@@ -46,7 +46,7 @@ export default function Contact() {
         </svg>
       ),
       title: "Call Us",
-      detail: "+91 9129652795",
+      detail: "+91 9215050000",
       link: "tel:+15551234567"
     },
     {
@@ -57,7 +57,7 @@ export default function Contact() {
         </svg>
       ),
       title: "Visit Us",
-      detail: "University Campus, Education City",
+      detail: "AISSO Headquarters, Rathee Garden, Gohana Road Meham, India 124112",
       link: "#"
     }
   ];
