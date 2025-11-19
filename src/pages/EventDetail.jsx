@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { events } from "../data/events";   // <-- FIXED IMPORT
+import  events  from "../data/events";   // <-- FIXED IMPORT
 import { useEffect } from "react";
 
 export default function EventDetail() {

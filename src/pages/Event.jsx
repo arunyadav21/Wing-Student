@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { events } from "../data/events";   // <-- FIXED IMPORT
+import  eventsLists  from "../data/events.js";   
 
 export default function Events() {
 
@@ -11,8 +11,8 @@ export default function Events() {
 
   const filteredEvents =
     activeFilter === "all"
-      ? events
-      : events.filter(event => event.category === activeFilter);
+      ? eventsLists
+      : eventsLists.filter(event => event.category === activeFilter);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">

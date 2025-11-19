@@ -4,7 +4,7 @@ import AdminLayout from "./components/adminlayout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import Events from "./pages/Events";
+import Events from "./pages/Event";
 import Resources from "./pages/Resorces";
 import Gallery from "./pages/Gallery";
 import Team from "./pages/Team";
