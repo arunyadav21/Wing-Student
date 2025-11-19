@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ✅ Events MUST be outside component (correct placement)
-export const events = [
+ const events = [
   { 
     id: 1, 
     title: "Tech Fest 2025", 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -63,9 +63,9 @@ const Home = () => {
   const totalSlides = Math.ceil(counsellors.length / counsellorsPerSlide);
 
   // Slider functionality with continuous loop
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  };
+  }, [totalSlides]);
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -96,7 +96,7 @@ const Home = () => {
     }, 4000);
 
     return () => clearInterval(slideInterval);
-  }, [totalSlides]);
+  }, [nextSlide]);
 
   // Login Modal Component
   const LoginModal = ({ onClose }) => {
