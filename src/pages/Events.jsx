@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { events } from "../data/events";
-  // ✅ Correct import
+import { events } from "../data/events";   // FIXED IMPORT
 
 export default function Events() {
-
   const [activeFilter, setActiveFilter] = useState("all");
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -21,7 +19,6 @@ export default function Events() {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email.trim() || !emailRegex.test(email)) {
@@ -55,7 +52,7 @@ export default function Events() {
             </p>
           </div>
 
-          {/* Category Buttons */}
+          {/* Category Filter Buttons */}
           <div className="flex flex-wrap gap-3 mt-6 md:mt-0">
             {categories.map(cat => (
               <button
@@ -64,7 +61,7 @@ export default function Events() {
                 className={`w-28 h-12 flex items-center justify-center rounded-full font-medium transition ${
                   activeFilter === cat
                     ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-500 hover:bg-blue-50"
+                    : "bg-white text-gray-400 hover:bg-blue-50"
                 }`}
               >
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -123,7 +120,7 @@ export default function Events() {
           ))}
         </div>
 
-        {/* No Events */}
+        {/* No Events Found */}
         {filteredEvents.length === 0 && (
           <div className="text-center py-12">
             <h3 className="text-2xl font-semibold">No events found</h3>
