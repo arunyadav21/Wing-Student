@@ -1,6 +1,6 @@
 // src/data/events.js
 
-export const events = [
+ const events = [
   { 
     id: 1, 
     title: "Tech Fest 2025", 
