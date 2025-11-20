@@ -50,6 +50,16 @@
     desc: "Connect with top companies and explore internship opportunities.", 
     category: "career",
     image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1170&q=80"
+  },
+  { 
+    id: 6, 
+    title: "Sports Meet", 
+    date: "15th Feb 2026", 
+    time: "11:00 AM - 4:00 PM",
+    location: "Main Hall",
+    desc: "Connect with top companies and explore internship opportunities.", 
+    category: "sports",
+    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
   }
 ];
 
