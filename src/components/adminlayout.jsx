@@ -5,7 +5,7 @@ export default function AdminLayout() {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-blue-700 text-white flex flex-col p-4">
-        <h2 className="text-2xl font-bold mb-8">Admin Panel</h2>
+        <h2 className="text-2xl font-bold mb-8">Admin Panel.</h2>
         <nav className="space-y-3">
           <Link to="/admin/dashboard" className="block px-3 py-2 rounded hover:bg-blue-600">
             Dashboard
